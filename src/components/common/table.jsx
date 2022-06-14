@@ -6,7 +6,7 @@ const Table = props => {
 
     const { columns, onSort, sortColumn, data} = props;
     return (  
-        <table className="table">
+        <table className="table mt-2">
         <TableHeader
           columns={columns}
           onSort={onSort}
