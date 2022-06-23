@@ -38,7 +38,7 @@ class Movies extends Component {
     this.setState({ movies });
 
     try{
-      await deleteMovie(movie._id);
+     await deleteMovie(movie._id);
     } catch(ex){
       if(ex.response && ex.response.status === 404)
         toast.error("This Movie Has Already Been Deleted!...");
@@ -123,6 +123,8 @@ class Movies extends Component {
 
     const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
 
+    const { user } = this.props;
+
     if (count === 0) return <p>There Are No Movies Available</p>;
 
     return (
@@ -136,13 +138,13 @@ class Movies extends Component {
         </div>
 
         <div className="col">
-          <Link
+          { user && <Link
             to="/movies/new"
             className="btn btn-primary"
             style={{ marginBottom: 20 }}
           >
             New Movie
-          </Link>
+          </Link>}
           <SearchBox value={searchQuery} onChange={this.handleSearch}/>
           <p>Showing {totalCount} Movies Available.</p>
 

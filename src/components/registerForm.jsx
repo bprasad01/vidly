@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import  Joi  from 'joi-browser';
 import Form from './common/form';
+import * as userService from '../services/userService';
+import auth from '../services/authService';
 
 class RegisterForm extends Form {
     state = { 
@@ -14,9 +16,21 @@ class RegisterForm extends Form {
         name : Joi.string().required().label("Name")
      }
 
-     doSubmit = () => {
-        //call from the server
-        console.log("Submit");
+     doSubmit = async () => {
+        try{
+           const response = await userService.register(this.state.data);
+           auth.loginWithJwt(response.headers['x-auth-token']);
+           window.location = '/';
+        } catch(ex){
+            // check if this error object or exception has a response is equal to 400
+            if(ex.response && ex.response.status === 400){
+                // clone the errors object and assign it into the new variable
+                const errors = {...this.state.errors};
+                // set the username and pass the error msg that is gettin out from ex.response
+                errors.username = ex.response.data;
+                this.setState({ errors });
+            }
+        }
      }
     render() { 
         return ( 

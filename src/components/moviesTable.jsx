@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import auth from "../services/authService";
 import Like from "./common/like";
 import Table from "./common/table";
 
@@ -24,7 +25,10 @@ class MoviesTable extends Component {
         />
       ),
     },
-    {
+    
+  ];
+
+  deleteColumn = {
       key: "delete",
       label: "Action",
       content: (movie) => (
@@ -35,8 +39,13 @@ class MoviesTable extends Component {
           DELETE
         </button>
       ),
-    },
-  ];
+  }
+
+  constructor(){
+    super();
+    const user = auth.getCurrentUser();
+    if( user && user.isAdmin) this.columns.push(this.deleteColumn)
+  }
 
   render() {
     const { movies, onSort, sortColumn } = this.props;
